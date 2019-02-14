@@ -1,4 +1,8 @@
 #!/bin/bash
+# ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
+# ├┴┐│ ││││└─┐ │ 
+# ┴ ┴└─┘┘└┘└─┘ ┴
+# Created by Siddharth Dushantha
 
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
