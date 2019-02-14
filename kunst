@@ -15,10 +15,10 @@ update_cover() {
 	# output of ffmpeg
 	ffmpeg -i "$MUSIC_DIR$(mpc current -f %file%)" $COVER -y &> /dev/null
 
-    # get the status of the previous command
+        # get the status of the previous command
 	STATUS=$?
 
-    # check if the file has a embbeded album art
+        # check if the file has a embbeded album art
 	if [ $STATUS -eq 0 ];then
 		echo "kunst: extracted album art"
 		ARTLESS=false
@@ -55,7 +55,7 @@ main() {
 
 	while true; do
 	    # waiting for an event from mpd; play/pause/next/previous
-		# this is lets kunst use less CPU :)
+	    # this is lets kunst use less CPU :)
 	    mpc idle &> /dev/null
 		echo "kunst: received event from mpd"
 
