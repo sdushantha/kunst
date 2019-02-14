@@ -22,3 +22,8 @@ Add ```kunst``` to a directory which is in you ```$PATH```
 - [ ] add arguments
   - [ ] music directory
   - [ ] image size (dimentions)
+
+## License
+MIT License
+
+Copyright © 2019 Siddharth Dushantha
