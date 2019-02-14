@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 # ├┴┐│ ││││└─┐ │ 
-# ┴ ┴└─┘┘└┘└─┘ ┴
+# ┴ ┴└─┘┘└┘└─┘ ┴ 
 # Created by Siddharth Dushantha
 
+VERSION=1.0
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 
