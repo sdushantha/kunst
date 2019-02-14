@@ -12,3 +12,6 @@ Note: ```kunst``` is meant to be used with files that have embedded album art
 - ```sxiv```
 - ```imagemagick```
 - ```bash```
+
+## Installation
+Add ```kunst``` to a directory which in you ```$PATH```
