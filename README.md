@@ -19,5 +19,6 @@ Add ```kunst``` to a directory which in you ```$PATH```
 ## TODO
 
 - [x] use less CPU
-- [ ] add argument for music directory
-- [ ] add argument for image size (dimentions)
+- [ ] add arguments
+  - [ ] music directory
+  - [ ] image size (dimentions)
