@@ -14,7 +14,7 @@ Note: ```kunst``` is meant to be used with files that have embedded album art
 - ```bash```
 
 ## Installation
-Add ```kunst``` to a directory which in you ```$PATH```
+Add ```kunst``` to a directory which is in you ```$PATH```
 
 ## TODO
 
