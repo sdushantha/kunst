@@ -1,5 +1,5 @@
 # kunst
-> Display album art for mpd tracks
+> Display embedded album art for mpd tracks
 
 Note: ```kunst``` is meant to be used with files that have embedded album art
 
