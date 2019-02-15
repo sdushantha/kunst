@@ -14,6 +14,8 @@
 - ```sxiv```
 - ```imagemagick```
 - ```bash```
+- ```ffmpeg```
+- ```mpc```
 
 ## Installation
 Add ```kunst``` to a directory which is in you ```$PATH```
