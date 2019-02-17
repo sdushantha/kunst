@@ -22,7 +22,7 @@ Add ```kunst``` to a directory which is in you ```$PATH```
 
 **OR**
 
-[AUR](https://aur.archlinux.org/packages/kunst-git/)
+[AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
 
 ## TODO
 
