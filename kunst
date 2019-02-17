@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
-# ├┴┐│ ││││└─┐ │ 
-# ┴ ┴└─┘┘└┘└─┘ ┴ 
+# ├┴┐│ ││││└─┐ │
+# ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
 
 # VERSION=1.0
@@ -22,21 +22,21 @@ update_cover() {
 	# output of ffmpeg
 	ffmpeg -i "$MUSIC_DIR$(mpc current -f %file%)" $COVER -y &> /dev/null
 
-    # get the status of the previous command
+	# get the status of the previous command
 	STATUS=$?
 
-    # check if the file has a embbeded album art
+	# check if the file has a embbeded album art
 	if [ $STATUS -eq 0 ];then
 		echo "kunst: extracted album art"
 		ARTLESS=false
 	else
-	    echo "error: file does not have an album art"
+		echo "error: file does not have an album art"
 		ARTLESS=true
 		return
 	fi
 
 	# resize the image to 250x250
-	convert $COVER -resize 250x250 $COVER 
+	convert $COVER -resize 250x250 $COVER
 
 	echo "kunst: resized album art to 250x250"
 }
@@ -46,24 +46,24 @@ main() {
 	update_cover
 
 	if [ $ARTLESS == true ];then
-	    # change the path to COVER because the music note
+		# change the path to COVER because the music note
 		# image is a png not jpg
-	    COVER=/tmp/kunst.png
+		COVER=/tmp/kunst.png
 
 		# decode the base64 encoded image and save it
 		# to /tmp/kunst.png
 		echo "$MUSIC_NOTE" | base64 --decode > $COVER
 	fi
-	
+
 	echo "kunst: swapped album art to $(mpc current)"
 
 	# display the album art using sxiv
 	sxiv -g 250x250 -b $COVER &
 
 	while true; do
-	    # waiting for an event from mpd; play/pause/next/previous
-	    # this is lets kunst use less CPU :)
-	    mpc idle &> /dev/null
+		# waiting for an event from mpd; play/pause/next/previous
+		# this is lets kunst use less CPU :)
+		mpc idle &> /dev/null
 		echo "kunst: received event from mpd"
 
 		update_cover
