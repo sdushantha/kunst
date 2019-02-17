@@ -20,6 +20,10 @@
 ## Installation
 Add ```kunst``` to a directory which is in you ```$PATH```
 
+**OR**
+
+[AUR](https://aur.archlinux.org/packages/kunst-git/)
+
 ## TODO
 
 - [x] use less CPU
