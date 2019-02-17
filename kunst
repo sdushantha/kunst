@@ -58,7 +58,7 @@ main() {
 	echo "kunst: swapped album art to $(mpc current)"
 
 	# display the album art using sxiv
-	sxiv -g 250x250 -b $COVER -N "KunstArt" &
+	sxiv -g 250x250 -b $COVER -N "Kunst" &
 
 	while true; do
 		# waiting for an event from mpd; play/pause/next/previous
