@@ -18,6 +18,10 @@
 - ```mpc```
 
 ## Installation
+```sudo make install```
+
+**OR**
+
 Add ```kunst``` to a directory which is in you ```$PATH```
 
 **OR**
