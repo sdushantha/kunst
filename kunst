@@ -4,7 +4,8 @@
 # ┴ ┴└─┘┘└┘└─┘ ┴ 
 # Created by Siddharth Dushantha
 
-VERSION=1.0
+# VERSION=1.0
+
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 
@@ -51,7 +52,7 @@ main() {
 
 		# decode the base64 encoded image and save it
 		# to /tmp/kunst.png
-		echo $MUSIC_NOTE | base64 --decode > $COVER
+		echo "$MUSIC_NOTE" | base64 --decode > $COVER
 	fi
 	
 	echo "kunst: swapped album art to $(mpc current)"
@@ -74,7 +75,7 @@ main() {
 
 			# decode the base64 encoded image and save it
 			# to /tmp/kunst.png
-			echo $MUSIC_NOTE | base64 --decode > $COVER
+			echo "$MUSIC_NOTE" | base64 --decode > $COVER
 		fi
 
 		echo "kunst: swapped album art to $(mpc current)"
