@@ -24,12 +24,12 @@ get_cover_online() {
 	# extract the albumcover from the json returned
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
 
-	if [ $IMG_URL = '' ] || [ $IMG_URL = 'null' ];then
+	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
 		echo "error: Cover not found online"
 		ARTLESS=true
 	else
 		echo "kunst: Cover found online"
-		wget -o $COVER $IMG_URL
+		wget -O "$COVER" "$IMG_URL"
 		ARTLESS=false
 	fi
 
