@@ -51,14 +51,14 @@ update_cover() {
 	else
 		echo "error: file does not have an album art"
 		get_cover_online
-		# ARTLESS=true
-		return
 	fi
 
 	# resize the image to 250x250
-	convert $COVER -resize 250x250 $COVER
+	if [ $ARTLESS == false ]; then
+		convert $COVER -resize 250x250 $COVER
+		echo "kunst: resized album art to 250x250"
+	fi
 
-	echo "kunst: resized album art to 250x250"
 }
 
 
