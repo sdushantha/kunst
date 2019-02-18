@@ -17,6 +17,25 @@ iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
 EOF
 
 
+get_cover_online() {
+	# Try to get the album cover online from api.deezer.com
+	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && ur=${ur//' '/'%20'}
+
+	# extract the albumcover from the json returned
+	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
+
+	if [ $IMG_URL = '' ] || [ $IMG_URL = 'null' ];then
+		echo "error: Cover not found online"
+		ARTLESS=true
+	else
+		echo "kunst: Cover found online"
+		wget -o $COVER $IMG_URL
+		ARTLESS=false
+	fi
+
+}
+
+
 update_cover() {
 	# extract the album art from the mp3 file and dont show the messsy
 	# output of ffmpeg
@@ -31,7 +50,8 @@ update_cover() {
 		ARTLESS=false
 	else
 		echo "error: file does not have an album art"
-		ARTLESS=true
+		get_cover_online
+		# ARTLESS=true
 		return
 	fi
 
