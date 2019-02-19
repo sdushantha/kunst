@@ -17,10 +17,28 @@ iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
 EOF
 
 
+is_connected() {
+	# Check if internet is connected
+	if ping -q -c 1 -W 1 8.8.8.8 >/dev/null; then
+		connected=true
+	else
+		echo "kunst: Can't check online for the cover"
+		connected=false
+	fi
+}
+
+
 get_cover_online() {
+	# Check if connected to internet
+	is_connected
+
+	if [ $connected == false ];then
+		ARTLESS=true
+		return
+	fi
+
 	# Try to get the album cover online from api.deezer.com
-	# API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && ur=${ur//' '/'%20'}
-	API_URL="http://api.deezer.com/search/autocomplete?q=Brian%20Crain%20-%20Song%20for%20Sienna"
+	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && ur=${ur//' '/'%20'}
 
 	# extract the albumcover from the json returned
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
