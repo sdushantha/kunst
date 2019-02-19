@@ -8,17 +8,17 @@
 
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
-DIMENSION=250x250
+SIZE=250x250
 
 # Parse the arguments
-options=$(getopt -o d:D:h --long dimension:,DIR:,help -- "$@")
+options=$(getopt -o d:D:h --long size:,DIR:,help -- "$@")
 eval set -- "$options"
 
 while true; do
     case "$1" in 
-        -d|--dimension)
+        -s|--size)
             shift;
-            DIMENSION=$1
+            SIZE=$1
             ;;
         -D|--DIR)
             shift;
@@ -26,7 +26,7 @@ while true; do
             ;;
         -h|--help)
             echo "kunst"
-			echo "   -d, --dimension: Pass the dimension for the image.(Default: $DIMENSION)"
+			echo "   -s, --size: Pass the size for the image.(Default: $SIZE)"
 			echo "   -D, --DIR: Pass the Music directory that MPD plays from. (Default: $MUSIC_DIR)"
 			echo "   -h, --help: Show this message and exit."
 			exit
@@ -104,8 +104,8 @@ update_cover() {
 
 	# resize the image to 250x250
 	if [ $ARTLESS == false ]; then
-		convert $COVER -resize $DIMENSION $COVER
-		echo "kunst: resized album art to $DIMENSION"
+		convert $COVER -resize $SIZE $COVER
+		echo "kunst: resized album art to $SIZE"
 	fi
 
 }
@@ -137,7 +137,7 @@ main() {
 			FIRST_RUN=false
 
 			# display the album art using sxiv
-			sxiv -g $DIMENSION -b $COVER -N "Kunst" &
+			sxiv -g $SIZE -b $COVER -N "Kunst" &
 		fi
 
 		# waiting for an event from mpd; play/pause/next/previous
