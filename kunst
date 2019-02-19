@@ -112,29 +112,11 @@ update_cover() {
 
 
 main() {
-	update_cover
 
-	if [ $ARTLESS == true ];then
-		# change the path to COVER because the music note
-		# image is a png not jpg
-		COVER=/tmp/kunst.png
-
-		# decode the base64 encoded image and save it
-		# to /tmp/kunst.png
-		echo "$MUSIC_NOTE" | base64 --decode > $COVER
-	fi
-
-	echo "kunst: swapped album art to $(mpc current)"
-	echo "------------------------------------------"
-
-	# display the album art using sxiv
-	sxiv -g $DIMENSION -b $COVER -N "Kunst" &
+	# Flag to run some commands only once in the loop
+	FIRST_RUN=true
 
 	while true; do
-		# waiting for an event from mpd; play/pause/next/previous
-		# this is lets kunst use less CPU :)
-		mpc idle &> /dev/null
-		echo "kunst: received event from mpd"
 
 		update_cover
 
@@ -150,6 +132,18 @@ main() {
 
 		echo "kunst: swapped album art to $(mpc current)"
 		echo "------------------------------------------"
+
+		if [ $FIRST_RUN == true ]; then
+			FIRST_RUN=false
+
+			# display the album art using sxiv
+			sxiv -g $DIMENSION -b $COVER -N "Kunst" &
+		fi
+
+		# waiting for an event from mpd; play/pause/next/previous
+		# this is lets kunst use less CPU :)
+		mpc idle &> /dev/null
+		echo "kunst: received event from mpd"
 	done
 }
 
