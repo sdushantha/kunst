@@ -26,6 +26,23 @@ Add ```kunst``` to a directory which is in your ```$PATH```
 
 [AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
 
+## Usage
+
+```bash
+$ kunst --help
+usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--version]
+ 
+┬┌─┬ ┬┌┐┌┌─┐┌┬┐
+├┴┐│ ││││└─┐ │
+┴ ┴└─┘┘└┘└─┘ ┴ 1.0
+Download and display album art or display embedded album art
+ 
+optional arguments:
+   -h, --help            show this help message and exit
+   --size                what size to display the album art in
+   --music_dir           the music directory which MPD plays from
+   --version             show the version of bum you are using
+```
 
 ## License
 MIT License
