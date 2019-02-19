@@ -19,7 +19,8 @@ EOF
 
 get_cover_online() {
 	# Try to get the album cover online from api.deezer.com
-	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && ur=${ur//' '/'%20'}
+	# API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && ur=${ur//' '/'%20'}
+	API_URL="http://api.deezer.com/search/autocomplete?q=Brian%20Crain%20-%20Song%20for%20Sienna"
 
 	# extract the albumcover from the json returned
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
@@ -29,7 +30,7 @@ get_cover_online() {
 		ARTLESS=true
 	else
 		echo "kunst: Cover found online"
-		wget -O "$COVER" "$IMG_URL"
+		curl -o $COVER -s $IMG_URL
 		ARTLESS=false
 	fi
 
