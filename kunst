@@ -4,33 +4,50 @@
 # ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
 
-# VERSION=1.0
-
+VERSION=1.0
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
 
-# Parse the arguments
-options=$(getopt -o d:D:h --long size:,DIR:,help -- "$@")
+
+show_help() {
+	echo "usage: kunst [-h] [--size "px"] [--music_dir "path/to/dir"] [--version]"
+	echo " "
+	echo "┬┌─┬ ┬┌┐┌┌─┐┌┬┐"
+	echo "├┴┐│ ││││└─┐ │"
+	echo "┴ ┴└─┘┘└┘└─┘ ┴ $VERSION"
+	echo "Download and display album art or display embedded album art"
+	echo " "
+	echo "optional arguments:"
+	echo "   -h, --help            show this help message and exit"
+	echo "   --size                what size to display the album art in"
+	echo "   --music_dir           the music directory which MPD plays from"
+	echo "   --version             show the version of bum you are using"
+}
+
+
+# parse the arguments
+options=$(getopt -o h --long size:,music_dir:,version,help -- "$@")
 eval set -- "$options"
 
 while true; do
     case "$1" in 
-        -s|--size)
+        --size)
             shift;
             SIZE=$1
             ;;
-        -D|--DIR)
+        --music_dir)
             shift;
             MUSIC_DIR=$1
             ;;
         -h|--help)
-            echo "kunst"
-			echo "   -s, --size: Pass the size for the image.(Default: $SIZE)"
-			echo "   -D, --DIR: Pass the Music directory that MPD plays from. (Default: $MUSIC_DIR)"
-			echo "   -h, --help: Show this message and exit."
+		    show_help
 			exit
             ;;
+		--version)
+		    echo $VERSION
+			exit
+			;;
         --)
             shift
             break
@@ -59,7 +76,7 @@ is_connected() {
 
 
 get_cover_online() {
-	# Check if connected to internet
+	# check if connected to internet
 	is_connected
 
 	if [ $connected == false ];then
@@ -67,7 +84,7 @@ get_cover_online() {
 		return
 	fi
 
-	# Try to get the album cover online from api.deezer.com
+	# try to get the album cover online from api.deezer.com
 	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
 
 	# extract the albumcover from the json returned
@@ -113,7 +130,7 @@ update_cover() {
 
 main() {
 
-	# Flag to run some commands only once in the loop
+	# flag to run some commands only once in the loop
 	FIRST_RUN=true
 
 	while true; do
