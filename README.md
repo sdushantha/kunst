@@ -22,7 +22,7 @@
 
 **OR**
 
-Add ```kunst``` to a directory which is in you ```$PATH```
+Add ```kunst``` to a directory which is in your ```$PATH```
 
 **OR**
 
