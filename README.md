@@ -28,12 +28,6 @@ Add ```kunst``` to a directory which is in you ```$PATH```
 
 [AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
 
-## TODO
-
-- [x] use less CPU
-- [ ] add arguments (need to learn how to do this)
-  - [ ] music directory
-  - [ ] image size (dimentions)
 
 ## License
 MIT License
