@@ -16,13 +16,15 @@
 - ```mpc```
 
 ## Installation
-```sudo make install```
-
-**OR**
+**Install using ```make```**
+```bash
+sudo make install
+```
+**Install it locally**
 
 Add ```kunst``` to a directory which is in your ```$PATH```
 
-**OR**
+**Install from the AUR**
 
 [AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
 
