@@ -36,7 +36,7 @@ usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--version]
  
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
-┴ ┴└─┘┘└┘└─┘ ┴ 1.0
+┴ ┴└─┘┘└┘└─┘ ┴
 Download and display album art or display embedded album art
  
 optional arguments:
