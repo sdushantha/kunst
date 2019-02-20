@@ -22,7 +22,7 @@ show_help() {
 	echo "   -h, --help            show this help message and exit"
 	echo "   --size                what size to display the album art in"
 	echo "   --music_dir           the music directory which MPD plays from"
-	echo "   --version             show the version of bum you are using"
+	echo "   --version             show the version of kunst you are using"
 }
 
 
