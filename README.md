@@ -30,9 +30,12 @@ Add ```kunst``` to a directory which is in your ```$PATH```
 
 ## Usage
 
-> If `kunst` ever gets super slow or stops grabbing album art and needs to restart, that means it has *Kunstipated*  
->
-> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;20 February 2019, [u/SpicyBroseph](https://www.reddit.com/user/SpicyBroseph)
+<p align="center">
+<a href="https://www.reddit.com/user/SpicyBroseph">
+<img src="https://user-images.githubusercontent.com/27065646/53107999-89ec9480-3536-11e9-98a2-9ff416bf4589.png">
+</a>
+</p>
+
 
 ```bash
 $ kunst --help
