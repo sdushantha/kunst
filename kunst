@@ -15,7 +15,7 @@ show_help() {
 	echo " "
 	echo "┬┌─┬ ┬┌┐┌┌─┐┌┬┐"
 	echo "├┴┐│ ││││└─┐ │"
-	echo "┴ ┴└─┘┘└┘└─┘ ┴ $VERSION"
+	echo "┴ ┴└─┘┘└┘└─┘ ┴"
 	echo "Download and display album art or display embedded album art"
 	echo " "
 	echo "optional arguments:"
