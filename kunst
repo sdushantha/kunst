@@ -115,6 +115,20 @@ update_cover() {
 		echo "kunst: extracted album art"
 		ARTLESS=false
 	else
+        DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
+        echo "kunst: inspecting $DIR"
+
+        for CANDIDATE in "$DIR/cover."{png,jpg}; do
+            if [ -f "$CANDIDATE" ]; then
+                STATUS=0
+                ARTLESS=false
+                convert "$CANDIDATE" $COVER
+                echo "kunst: found cover.png"
+            fi
+        done
+    fi
+
+	if [ $STATUS -ne 0 ];then
 		echo "error: file does not have an album art"
 		get_cover_online
 	fi
