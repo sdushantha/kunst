@@ -65,11 +65,13 @@ EOF
 
 
 is_connected() {
-	# Check if internet is connected
-	if ping -q -c 1 -W 1 8.8.8.8 >/dev/null; then
+	# check if internet is connected. we are using api.deezer.com to test
+	# if the internet is connected because if api.deezer.com is down or 
+	# the internet is not connected this script will work as expected
+	if ping -q -c 1 -W 1 api.deezer.com >/dev/null; then
 		connected=true
 	else
-		echo "kunst: Can't check online for the cover"
+		echo "kunst: unable to check online for the album art"
 		connected=false
 	fi
 }
@@ -91,10 +93,10 @@ get_cover_online() {
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
 
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
-		echo "error: Cover not found online"
+		echo "error: cover not found online"
 		ARTLESS=true
 	else
-		echo "kunst: Cover found online"
+		echo "kunst: cover found online"
 		curl -o $COVER -s $IMG_URL
 		ARTLESS=false
 	fi
@@ -118,6 +120,8 @@ update_cover() {
         DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
         echo "kunst: inspecting $DIR"
 
+		# check if there is an album cover/art in the folder.
+		# look at issue #9 for more details
         for CANDIDATE in "$DIR/cover."{png,jpg}; do
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
