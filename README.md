@@ -14,6 +14,7 @@
 - ```bash```
 - ```ffmpeg```
 - ```mpc```
+- ```jq```
 
 ## Installation
 **Install using ```make```**
