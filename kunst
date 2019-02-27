@@ -3,6 +3,9 @@
 # ├┴┐│ ││││└─┐ │
 # ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
+#
+# Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq
+
 
 VERSION=1.2.1
 COVER=/tmp/kunst.jpg
