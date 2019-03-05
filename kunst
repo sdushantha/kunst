@@ -30,7 +30,7 @@ show_help() {
 
 
 # Parse the arguments
-options=$(getopt -o h --long size:,music_dir:,version,help -- "$@")
+options=$(getopt -o h --long size:,music_dir:,version,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -51,6 +51,9 @@ while true; do
 		    echo $VERSION
 			exit
 			;;
+        --silent)
+            SILENT=true
+            ;;
         --)
             shift
             break
@@ -74,7 +77,9 @@ is_connected() {
 	if ping -q -c 1 -W 1 api.deezer.com >/dev/null; then
 		connected=true
 	else
-		echo "kunst: unable to check online for the album art"
+        if [ ! $SILENT ];then
+            echo "kunst: unable to check online for the album art"
+        fi
 		connected=false
 	fi
 }
@@ -96,10 +101,14 @@ get_cover_online() {
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
 
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
-		echo "error: cover not found online"
+        if [ ! $SILENT ];then
+            echo "error: cover not found online"
+        fi
 		ARTLESS=true
 	else
-		echo "kunst: cover found online"
+        if [ ! $SILENT ];then
+            echo "kunst: cover found online"
+        fi
 		curl -o $COVER -s $IMG_URL
 		ARTLESS=false
 	fi
@@ -117,11 +126,15 @@ update_cover() {
 
 	# Check if the file has a embbeded album art
 	if [ $STATUS -eq 0 ];then
-		echo "kunst: extracted album art"
+        if [ ! $SILENT ];then 
+            echo "kunst: extracted album art"
+        fi
 		ARTLESS=false
 	else
         DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
-        echo "kunst: inspecting $DIR"
+        if [ ! $SILENT ];then
+            echo "kunst: inspecting $DIR"
+        fi
 
 		# Check if there is an album cover/art in the folder.
 		# Look at issue #9 for more details
@@ -130,27 +143,38 @@ update_cover() {
                 STATUS=0
                 ARTLESS=false
                 convert "$CANDIDATE" $COVER
-                echo "kunst: found cover.png"
+                if [ ! $SILENT ];then
+                    echo "kunst: found cover.png"
+                fi
             fi
         done
     fi
 
 	if [ $STATUS -ne 0 ];then
-		echo "error: file does not have an album art"
+        if [ ! $SILENT ];then
+            echo "error: file does not have an album art"
+        fi
 		get_cover_online
 	fi
 
 	# Resize the image to 250x250
 	if [ $ARTLESS == false ]; then
 		convert $COVER -resize $SIZE $COVER
-		echo "kunst: resized album art to $SIZE"
+        if [ ! $SILENT ];then
+            echo "kunst: resized album art to $SIZE"
+        fi
 	fi
 
 }
 
 pre_exit() {
-	# Get the proccess ID of kunst and kill it
-	kill -9 $(cat /tmp/kunst.pid)
+	# Get the proccess ID of kunst and kill it.
+    # We are dumping the output of kill to /dev/null
+    # because if the user quits sxiv before they
+    # exit kunst, an error will be shown
+    # from kill and we dont want that
+	kill -9 $(cat /tmp/kunst.pid) &> /dev/null
+ 
 }
 
 main() {
@@ -171,9 +195,11 @@ main() {
 			# to /tmp/kunst.png
 			echo "$MUSIC_NOTE" | base64 --decode > $COVER
 		fi
-
-		echo "kunst: swapped album art to $(mpc current)"
-		echo "------------------------------------------"
+        
+        if [ ! $SILENT ];then
+            echo "kunst: swapped album art to $(mpc current)"
+            echo "------------------------------------------"
+        fi
 
 		if [ $FIRST_RUN == true ]; then
 			FIRST_RUN=false
@@ -189,7 +215,9 @@ main() {
 		# Waiting for an event from mpd; play/pause/next/previous
 		# this is lets kunst use less CPU :)
 		mpc idle &> /dev/null
-		echo "kunst: received event from mpd"
+        if [ ! $SILENT ];then
+            echo "kunst: received event from mpd"
+        fi
 	done
 }
 
