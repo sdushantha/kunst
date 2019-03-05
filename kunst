@@ -148,6 +148,9 @@ update_cover() {
 
 }
 
+pre_exit() {
+	kill -9 $(cat /tmp/kunst.pid)
+}
 
 main() {
 
@@ -176,6 +179,7 @@ main() {
 
 			# display the album art using sxiv
 			sxiv -g $SIZE -b $COVER -N "Kunst" &
+			echo $! >/tmp/kunst.pid
 		fi
 
 		# waiting for an event from mpd; play/pause/next/previous
@@ -185,5 +189,5 @@ main() {
 	done
 }
 
-
+trap pre_exit EXIT
 main
