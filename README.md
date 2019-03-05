@@ -28,7 +28,7 @@ sudo make install
 # and make it executeable
 $ curl git.io/raw-kunst > kunst && chmod +x kunst
 
-# Then move kunst somewhere in your $PATH
+# Then move kunst to somewhere in your $PATH
 # Here is an example
 $ mv kunst ~/script/
 ```
