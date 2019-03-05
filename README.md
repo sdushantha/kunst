@@ -17,15 +17,24 @@
 - ```jq```
 
 ## Installation
-**Install using ```make```**
+### Install using ```make```
 ```bash
 sudo make install
 ```
-**Install it locally**
+### Install it locally
+
+**Method 1**
 
 Add ```kunst``` to a directory which is in your ```$PATH```
 
-**Install from the AUR**
+**Method 2**
+
+
+```bash
+ curl git.io/raw-kunst > kunst && chmod +x kunst
+```
+
+### Install from the AUR
 
 [AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
 
