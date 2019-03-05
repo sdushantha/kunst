@@ -19,7 +19,14 @@
 ## Installation
 ### Install using ```make```
 ```bash
-sudo make install
+# Clone the repo
+$ git clone https://github.com/sdushantha/kunst
+
+# Change your current directory to kunst
+$ cd kunst
+
+# Install it
+$ sudo make install
 ```
 ### Install it locally
 
