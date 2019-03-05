@@ -33,7 +33,7 @@ $ sudo make install
 ```bash
 # Download the kunst source code, save as kunst
 # and make it executeable
-$ curl git.io/raw-kunst > kunst && chmod +x kunst
+$ curl -L git.io/raw-kunst > kunst && chmod +x kunst
 
 # Then move kunst to somewhere in your $PATH
 # Here is an example
