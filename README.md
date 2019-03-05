@@ -24,7 +24,8 @@ sudo make install
 ### Install it locally
 
 ```bash
-# Download the kunst source code and save as kunst
+# Download the kunst source code, save as kunst
+# and make it executeable
 $ curl git.io/raw-kunst > kunst && chmod +x kunst
 
 # Then move kunst somewhere in your $PATH
