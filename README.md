@@ -23,15 +23,13 @@ sudo make install
 ```
 ### Install it locally
 
-**Method 1**
-
-Add ```kunst``` to a directory which is in your ```$PATH```
-
-**Method 2**
-
-
 ```bash
- curl git.io/raw-kunst > kunst && chmod +x kunst
+# Download the kunst source code and save as kunst
+$ curl git.io/raw-kunst > kunst && chmod +x kunst
+
+# Then move kunst somewhere in your $PATH
+# Here is an example
+$ mv kunst ~/script/
 ```
 
 ### Install from the AUR
