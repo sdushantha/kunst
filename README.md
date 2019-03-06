@@ -48,7 +48,7 @@ $ mv kunst ~/script/
 
 ```bash
 $ kunst --help
-usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--version]
+usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--silent] [--version]
  
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
