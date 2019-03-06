@@ -14,7 +14,7 @@ SIZE=250x250
 
 
 show_help() {
-	echo "usage: kunst [-h] [--size "px"] [--music_dir "path/to/dir"] [--version]"
+	echo "usage: kunst [-h] [--size "px"] [--music_dir "path/to/dir"] [--silent] [--version]"
 	echo " "
 	echo "┬┌─┬ ┬┌┐┌┌─┐┌┬┐"
 	echo "├┴┐│ ││││└─┐ │"
