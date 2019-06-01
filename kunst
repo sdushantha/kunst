@@ -122,16 +122,21 @@ write_tag(){
     #uses eyeD3
     eyeD3 -v ~/Music/$(mpc current -f %file%)  | egrep "None|null" && tags="0" || tags="1"
     if  [ $tags -eq "0"  ] ;then
-        echo "Some tags missing"
+        echo "kunst: couldn't find some tags missing"
 	    API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
-        #album
-        echo "writing down album name"
-        eyeD3 -A "$( curl -s "$API_URL" | jq -r '.tracks.data[0].album.title')" $MUSIC_DIR$(mpc current -f %file%)
+        album_name="$( curl -s "$API_URL" | jq -r '.tracks.data[0].album.title')"
+        album_artist="$( curl -s "$API_URL" | jq -r '.tracks.data[0].artist.name')"
+
+#album
+        echo "kunst: writing down album name"
+        echo "Album name : $album_name"
+        eyeD3 -A "$album_name" $MUSIC_DIR$(mpc current -f %file%)
         #album artist
-        echo "writing down album artist"
-        eyeD3 -b "$( curl -s "$API_URL" | jq -r '.tracks.data[0].artist.name')"  $MUSIC_DIR$(mpc current -f %file%)
+        echo "kunst: writing down album artist"
+        echo "Album artist : $album_artist"
+        eyeD3 -b "$album_artist"  $MUSIC_DIR$(mpc current -f %file%)
     else
-        echo "All tags are present"
+        echo "kunst: all tags are present"
     fi
 
 }
@@ -203,7 +208,6 @@ main() {
 	FIRST_RUN=true
 	while true; do
 		update_cover
-       # write_tag
 		if [ $ARTLESS == true ];then
 			# Dhange the path to COVER because the music note
 			# image is a png not jpg
@@ -232,7 +236,10 @@ main() {
 
 		# Waiting for an event from mpd; play/pause/next/previous
 		# this is lets kunst use less CPU :)
-		mpc idle &> /dev/null
+        event=$(mpc idle)
+        if [ $event == "player" ] ;then
+            write_tag
+        fi
         if [ ! $SILENT ];then
             echo "kunst: received event from mpd"
         fi
