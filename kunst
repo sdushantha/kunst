@@ -203,7 +203,7 @@ main() {
 	FIRST_RUN=true
 	while true; do
 		update_cover
-        write_tag
+       # write_tag
 		if [ $ARTLESS == true ];then
 			# Dhange the path to COVER because the music note
 			# image is a png not jpg
