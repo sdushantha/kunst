@@ -15,6 +15,8 @@
 - ```ffmpeg```
 - ```mpc```
 - ```jq```
+- ```eyeD3```
+
 
 ## Installation
 ### Install using ```make```
@@ -49,12 +51,12 @@ $ mv kunst ~/script/
 ```bash
 $ kunst --help
 usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--silent] [--version]
- 
+
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
 ┴ ┴└─┘┘└┘└─┘ ┴
 Download and display album art or display embedded album art
- 
+
 optional arguments:
    -h, --help            show this help message and exit
    --size                what size to display the album art in

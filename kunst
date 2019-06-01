@@ -35,7 +35,7 @@ options=$(getopt -o h --long size:,music_dir:,version,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
-    case "$1" in 
+    case "$1" in
         --size)
             shift;
             SIZE=$1
@@ -73,7 +73,7 @@ EOF
 
 is_connected() {
 	# Check if internet is connected. We are using api.deezer.com to test
-	# if the internet is connected because if api.deezer.com is down or 
+	# if the internet is connected because if api.deezer.com is down or
 	# the internet is not connected this script will work as expected
 	if ping -q -c 1 -W 1 api.deezer.com >/dev/null; then
 		connected=true
@@ -99,8 +99,8 @@ get_cover_online() {
 	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
 
 	# Extract the albumcover from the json returned
-	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
-
+	#IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
+	IMG_URL=$( curl -s "$API_URL" | jq -r '.tracks.data[0].album.cover_big')
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
         if [ ! $SILENT ];then
             echo "error: cover not found online"
@@ -111,11 +111,30 @@ get_cover_online() {
             echo "kunst: cover found online"
         fi
 		curl -o $COVER -s $IMG_URL
+        eyeD3 --add-image $COVER:FRONT_COVER $MUSIC_DIR$(mpc current -f %file%)
 		ARTLESS=false
 	fi
 
 }
 
+write_tag(){
+    #writes down song data if absent
+    #uses eyeD3
+    eyeD3 -v ~/Music/$(mpc current -f %file%)  | egrep "None|null" && tags="0" || tags="1"
+    if  [ $tags -eq "0"  ] ;then
+        echo "Some tags missing"
+	    API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
+        #album
+        echo "writing down album name"
+        eyeD3 -A "$( curl -s "$API_URL" | jq -r '.tracks.data[0].album.title')" $MUSIC_DIR$(mpc current -f %file%)
+        #album artist
+        echo "writing down album artist"
+        eyeD3 -b "$( curl -s "$API_URL" | jq -r '.tracks.data[0].artist.name')"  $MUSIC_DIR$(mpc current -f %file%)
+    else
+        echo "All tags are present"
+    fi
+
+}
 
 update_cover() {
 	# Extract the album art from the mp3 file and dont show the messsy
@@ -127,7 +146,7 @@ update_cover() {
 
 	# Check if the file has a embbeded album art
 	if [ $STATUS -eq 0 ];then
-        if [ ! $SILENT ];then 
+        if [ ! $SILENT ];then
             echo "kunst: extracted album art"
         fi
 		ARTLESS=false
@@ -175,28 +194,26 @@ pre_exit() {
     # exit kunst, an error will be shown
     # from kill and we dont want that
 	kill -9 $(cat /tmp/kunst.pid) &> /dev/null
- 
+
 }
 
 main() {
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
-
 	while true; do
-
 		update_cover
-
+        write_tag
 		if [ $ARTLESS == true ];then
 			# Dhange the path to COVER because the music note
 			# image is a png not jpg
-			COVER=/tmp/kunst.png
+			COVER=/tmp/kunst.jpg
 
 			# Decode the base64 encoded image and save it
 			# to /tmp/kunst.png
 			echo "$MUSIC_NOTE" | base64 --decode > $COVER
 		fi
-        
+
         if [ ! $SILENT ];then
             echo "kunst: swapped album art to $(mpc current)"
             printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
@@ -207,7 +224,7 @@ main() {
 
 			# Display the album art using sxiv
 			sxiv -g $SIZE -b $COVER -N "Kunst" &
-			
+
 			# Save the process ID so that we can kill
 			# sxiv when the user exits the script
 			echo $! >/tmp/kunst.pid
