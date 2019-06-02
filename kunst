@@ -120,7 +120,7 @@ get_cover_online() {
 write_tag(){
     #writes down song data if absent
     #uses eyeD3
-    eyeD3 -v ~/Music/$(mpc current -f %file%)  | egrep "None|null" && tags="0" || tags="1"
+    eyeD3 -v "$MUSIC_DIR$(mpc current -f %file%)"  | egrep "None|null" && tags="0" || tags="1"
     if  [ $tags -eq "0"  ] ;then
         echo "kunst: couldn't find some tags missing"
 	    API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
