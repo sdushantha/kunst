@@ -15,7 +15,6 @@
 - ```ffmpeg```
 - ```mpc```
 - ```jq```
-- ```eyeD3```
 
 
 ## Installation
