@@ -7,7 +7,7 @@
 # Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq
 
 
-VERSION=1.2.3
+VERSION=1.2.4
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/music/
 SIZE=250x250
