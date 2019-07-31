@@ -9,7 +9,7 @@
 
 VERSION=1.2.3
 COVER=/tmp/kunst.jpg
-MUSIC_DIR=~/Music/
+MUSIC_DIR=~/music/
 SIZE=250x250
 
 
@@ -143,7 +143,7 @@ update_cover() {
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
                 ARTLESS=false
-                convert "$CANDIDATE" $COVER
+                convert "$CANDIDATE" $COVER &> /dev/null
                 if [ ! $SILENT ];then
                     echo "kunst: found cover.png"
                 fi
@@ -160,7 +160,7 @@ update_cover() {
 
 	# Resize the image to 250x250
 	if [ $ARTLESS == false ]; then
-		convert $COVER -resize $SIZE $COVER
+		convert $COVER -resize $SIZE $COVER &> /dev/null
         if [ ! $SILENT ];then
             echo "kunst: resized album art to $SIZE"
         fi
