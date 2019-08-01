@@ -218,7 +218,9 @@ main() {
 
 		# Waiting for an event from mpd; play/pause/next/previous
 		# this is lets kunst use less CPU :)
-		mpc idle &> /dev/null
+		while true; do
+		    mpc idle player &>/dev/null && (mpc status | grep "\[playing\]" &>/dev/null) && break
+		done
         if [ ! $SILENT ];then
             echo "kunst: received event from mpd"
         fi
