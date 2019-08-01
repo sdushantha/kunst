@@ -180,8 +180,8 @@ pre_exit() {
 
 main() {
     
-    [[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR && echo "custom dir"
-    [[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE && echo "custom size"
+    [[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR
+    [[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
