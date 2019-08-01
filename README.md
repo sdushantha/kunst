@@ -70,6 +70,18 @@ optional arguments:
 </a>
 </p>
 
+
+## Configure
+You can configure `kunst` through environment variables.
+
+```bash
+# The size of the album art to be displayed
+export KUNST_SIZE="250x250"
+
+# Where your music is located
+export KUNST_MUSIC_DIR="/home/username/Music/"
+```
+
 ## License
 MIT License
 
