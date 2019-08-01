@@ -9,7 +9,7 @@
 
 VERSION=1.2.4
 COVER=/tmp/kunst.jpg
-MUSIC_DIR=~/music/
+MUSIC_DIR=~/Music/
 SIZE=250x250
 
 
@@ -179,6 +179,9 @@ pre_exit() {
 }
 
 main() {
+    
+    [[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR && echo "custom dir"
+    [[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE && echo "custom size"
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
