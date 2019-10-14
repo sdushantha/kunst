@@ -11,6 +11,7 @@ VERSION=1.2.4
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
+POSITION="+0+0"
 
 
 show_help() {
