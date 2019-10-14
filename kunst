@@ -215,7 +215,7 @@ main() {
 			FIRST_RUN=false
 
 			# Display the album art using sxiv
-			sxiv -g $SIZE -b $COVER -N "Kunst" &
+			sxiv -g $SIZE$POSITION -b $COVER -N "Kunst" &
 			
 			# Save the process ID so that we can kill
 			# sxiv when the user exits the script
