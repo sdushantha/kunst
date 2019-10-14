@@ -32,7 +32,7 @@ show_help() {
 
 
 # Parse the arguments
-options=$(getopt -o h --long size:,music_dir:,version,silent,help -- "$@")
+options=$(getopt -o h --long position:,size:,music_dir:,version,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -40,6 +40,10 @@ while true; do
         --size)
             shift;
             SIZE=$1
+            ;;
+        --position)
+            shift;
+            POSITION=$1
             ;;
         --music_dir)
             shift;
@@ -183,6 +187,7 @@ main() {
     
     [[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR
     [[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE
+    [[ $KUNST_POSITION != "" ]] && POSITION=$KUNST_POSITION
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
