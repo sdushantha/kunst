@@ -59,6 +59,7 @@ Download and display album art or display embedded album art
 optional arguments:
    -h, --help            show this help message and exit
    --size                what size to display the album art in
+   --position            The position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
    --silent              dont show the output
    --version             show the version of kunst you are using
@@ -77,6 +78,9 @@ You can configure `kunst` through environment variables.
 ```bash
 # The size of the album art to be displayed
 export KUNST_SIZE="250x250"
+
+# The position where the album art should be displayed
+export KUNST_POSITION="+0+0"
 
 # Where your music is located
 export KUNST_MUSIC_DIR="/home/username/Music/"

@@ -25,7 +25,7 @@ show_help() {
 	echo "optional arguments:"
 	echo "   -h, --help            show this help message and exit"
 	echo "   --size                what size to display the album art in"
-  echo "   --position            where the album art should be located"
+  echo "   --position            The position where the album art should be displayed"
 	echo "   --music_dir           the music directory which MPD plays from"
 	echo "   --silent              dont show the output"
 	echo "   --version             show the version of kunst you are using"
