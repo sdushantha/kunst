@@ -11,10 +11,11 @@ VERSION=1.2.4
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
+POSITION="+0+0"
 
 
 show_help() {
-	echo "usage: kunst [-h] [--size "px"] [--music_dir "path/to/dir"] [--silent] [--version]"
+	echo "usage: kunst [-h] [--size "px"] [--position "+x+y"][--music_dir "path/to/dir"] [--silent] [--version]"
 	echo " "
 	echo "┬┌─┬ ┬┌┐┌┌─┐┌┬┐"
 	echo "├┴┐│ ││││└─┐ │"
@@ -24,6 +25,7 @@ show_help() {
 	echo "optional arguments:"
 	echo "   -h, --help            show this help message and exit"
 	echo "   --size                what size to display the album art in"
+  echo "   --position            The position where the album art should be displayed"
 	echo "   --music_dir           the music directory which MPD plays from"
 	echo "   --silent              dont show the output"
 	echo "   --version             show the version of kunst you are using"
@@ -31,7 +33,7 @@ show_help() {
 
 
 # Parse the arguments
-options=$(getopt -o h --long size:,music_dir:,version,silent,help -- "$@")
+options=$(getopt -o h --long position:,size:,music_dir:,version,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -39,6 +41,10 @@ while true; do
         --size)
             shift;
             SIZE=$1
+            ;;
+        --position)
+            shift;
+            POSITION=$1
             ;;
         --music_dir)
             shift;
@@ -182,6 +188,7 @@ main() {
     
     [[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR
     [[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE
+    [[ $KUNST_POSITION != "" ]] && POSITION=$KUNST_POSITION
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
@@ -209,7 +216,7 @@ main() {
 			FIRST_RUN=false
 
 			# Display the album art using sxiv
-			sxiv -g $SIZE -b $COVER -N "Kunst" &
+			sxiv -g $SIZE$POSITION -b $COVER -N "Kunst" &
 			
 			# Save the process ID so that we can kill
 			# sxiv when the user exits the script
