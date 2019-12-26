@@ -4,7 +4,7 @@
 
 
 <p align="left">
-<img src="https://media.giphy.com/media/5WieRVgCvD4H0V53QY/giphy.gif">
+<img src="https://user-images.githubusercontent.com/27065646/71469812-9a127780-27ca-11ea-88eb-1abb801d2a48.gif">
 </a>
 </p>
 
