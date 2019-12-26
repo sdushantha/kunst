@@ -65,12 +65,6 @@ optional arguments:
    --version             show the version of kunst you are using
 ```
 
-<p align="center">
-<a href="https://www.reddit.com/user/SpicyBroseph">
-<img src="https://user-images.githubusercontent.com/27065646/53107999-89ec9480-3536-11e9-98a2-9ff416bf4589.png">
-</a>
-</p>
-
 
 ## Configure
 You can configure `kunst` through environment variables.
@@ -85,6 +79,12 @@ export KUNST_POSITION="+0+0"
 # Where your music is located
 export KUNST_MUSIC_DIR="/home/username/Music/"
 ```
+
+<p align="center">
+<a href="https://www.reddit.com/user/SpicyBroseph">
+<img src="https://user-images.githubusercontent.com/27065646/53107999-89ec9480-3536-11e9-98a2-9ff416bf4589.png">
+</a>
+</p>
 
 ## License
 MIT License
