@@ -15,6 +15,7 @@
 - ```ffmpeg```
 - ```mpc```
 - ```jq```
+- ```mpd```
 
 
 ## Installation
