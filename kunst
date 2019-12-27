@@ -4,7 +4,7 @@
 # ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
 #
-# Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq
+# Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
 
 VERSION=1.2.4
