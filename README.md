@@ -42,10 +42,6 @@ $ curl -L git.io/raw-kunst > kunst && chmod +x kunst
 $ mv kunst ~/script/
 ```
 
-### Install from the AUR
-
-[AUR](https://aur.archlinux.org/packages/kunst-git/) *(maintained by [networkpanic](https://github.com/networkpanic))*
-
 ## Usage
 
 ```bash
