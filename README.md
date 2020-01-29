@@ -56,7 +56,7 @@ Download and display album art or display embedded album art
 optional arguments:
    -h, --help            show this help message and exit
    --size                what size to display the album art in
-   --position            The position where the album art should be displayed
+   --position            the position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
    --silent              dont show the output
    --version             show the version of kunst you are using
