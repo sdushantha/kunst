@@ -4,18 +4,19 @@
 # ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
 #
-# Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
+# Dependencies: sxiv or imv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
 
 VERSION=1.2.4
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
-SIZE=250x250
+WIDTH=250
+SIZE="${WIDTH}x${WIDTH}"
 POSITION="+0+0"
 
 
 show_help() {
-	echo "usage: kunst [-h] [--size "px"] [--position "+x+y"][--music_dir "path/to/dir"] [--silent] [--version]"
+	echo "usage: kunst [-h] [--size "px"] [--position "+x+y"] [--viewer <imv|x11>] [--music_dir "path/to/dir"] [--silent] [--version]"
 	echo " "
 	echo "┬┌─┬ ┬┌┐┌┌─┐┌┬┐"
 	echo "├┴┐│ ││││└─┐ │"
@@ -25,7 +26,8 @@ show_help() {
 	echo "optional arguments:"
 	echo "   -h, --help            show this help message and exit"
 	echo "   --size                what size to display the album art in"
-    echo "   --position            the position where the album art should be displayed"
+  echo "   --position            the position where the album art should be displayed"
+	echo "   --viewer              whether to use imv or sxiv"
 	echo "   --music_dir           the music directory which MPD plays from"
 	echo "   --silent              dont show the output"
 	echo "   --version             show the version of kunst you are using"
@@ -46,6 +48,10 @@ while true; do
             shift;
             POSITION=$1
             ;;
+				--viewer)
+					shift;
+					VIEWER=$1
+					;;
         --music_dir)
             shift;
             MUSIC_DIR=$1
@@ -68,6 +74,13 @@ while true; do
     esac
     shift
 done
+
+# If available, use imv instead of sxiv on Wayland,
+# unless specified otherwise by the user.
+if [ -n "$SWAYSOCK" ] || [ "$XDG_SESSION_TYPE" = 'wayland' ] \
+	&& [ -z "$VIEWER" ] && command -v imv >/dev/null; then
+	VIEWER=imv
+fi
 
 # This is a base64 endcoded image which will be used if
 # the file does not have an emmbeded album art.
@@ -177,8 +190,8 @@ update_cover() {
 pre_exit() {
 	# Get the proccess ID of kunst and kill it.
     # We are dumping the output of kill to /dev/null
-    # because if the user quits sxiv before they
-    # exit kunst, an error will be shown
+    # because if the user quits the image viewer
+		# before they exit kunst, an error will be shown
     # from kill and we dont want that
 	kill -9 $(cat /tmp/kunst.pid) &> /dev/null
  
@@ -215,11 +228,17 @@ main() {
 		if [ $FIRST_RUN == true ]; then
 			FIRST_RUN=false
 
-			# Display the album art using sxiv
-			sxiv -g $SIZE$POSITION -b $COVER -N "Kunst" &
-			
-			# Save the process ID so that we can kill
-			# sxiv when the user exits the script
+			# Display the album art
+			if [ "$VIEWER" = 'imv' ]; then
+				# if running SwayWM, tell sway to resize the imv window
+				[ -n "$SWAYSOCK" ] \
+					&& swaymsg for_window '[app_id="^imv$" title="^imv.*\/tmp\/kunst\.(jpg|png)"]' resize set width "$WIDTH" px height "$WIDTH" px
+				imv "$COVER" &
+			else
+				sxiv -g $SIZE$POSITION -b $COVER -N "Kunst" &
+			fi
+			# Save the process ID so that we can kill the
+			# image viewer when the user exits the script
 			echo $! >/tmp/kunst.pid
 		fi
 
@@ -231,12 +250,14 @@ main() {
         if [ ! $SILENT ];then
             echo "kunst: received event from mpd"
         fi
+		imv-msg "$(cat /tmp/kunst.pid)" close all
+		imv-msg "$(cat /tmp/kunst.pid)" open "$COVER"
 	done
 }
 
 # Disable CTRL-Z because if we allowed this key press,
-# then the script would exit but, sxiv would still be
-# running
+# then the script would exit but, the image viewer
+# would still be running
 trap "" SIGTSTP
 
 trap pre_exit EXIT

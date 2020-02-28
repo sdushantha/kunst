@@ -9,7 +9,7 @@
 </p>
 
 ## Dependencies
-- ```sxiv```
+- ```sxiv``` or ```imv```
 - ```imagemagick```
 - ```bash```
 - ```ffmpeg```
