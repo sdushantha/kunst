@@ -151,23 +151,30 @@ update_cover() {
         fi
 		ARTLESS=false
 	else
-        DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
+        DIR="$MUSIC_DIR/$(dirname "$(mpc current -f %file%)")"
         if [ ! $SILENT ];then
             echo "kunst: inspecting $DIR"
         fi
 
 		# Check if there is an album cover/art in the folder.
 		# Look at issue #9 for more details
-        for CANDIDATE in "$DIR/cover."{png,jpg}; do
+		# use same regex to find album art as mpDris2
+		candidates=$(
+			find "$DIR" -type f \
+				| grep -iE '/(album|cover|\.?folder|front).*\.(gif|jpeg|jpg|png)'
+		)
+          while read -r CANDIDATE; do
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
-                ARTLESS=false
-                convert "$CANDIDATE" $COVER &> /dev/null
+                export ARTLESS=false
+                convert "$CANDIDATE" $COVER
+								ls -l $COVER
                 if [ ! $SILENT ];then
-                    echo "kunst: found cover.png"
+                    echo "kunst: found cover $CANDIDATE"
                 fi
+								break
             fi
-        done
+        done <<< "$candidates" # use here string so loop changes vars in main process
     fi
 
 	if [ $STATUS -ne 0 ];then
