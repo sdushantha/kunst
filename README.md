@@ -10,7 +10,6 @@
 
 ## Dependencies
 - ```sxiv``` or ```imv```
-- ```imagemagick```
 - ```bash```
 - ```ffmpeg```
 - ```mpc```
