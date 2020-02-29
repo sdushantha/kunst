@@ -250,8 +250,10 @@ main() {
         if [ ! $SILENT ];then
             echo "kunst: received event from mpd"
         fi
-		imv-msg "$(cat /tmp/kunst.pid)" close all
-		imv-msg "$(cat /tmp/kunst.pid)" open "$COVER"
+		if [ "$VIEWER" = 'imv' ]; then
+			imv-msg "$(cat /tmp/kunst.pid)" close all
+			imv-msg "$(cat /tmp/kunst.pid)" open "$COVER"
+		fi
 	done
 }
 
