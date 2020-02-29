@@ -102,10 +102,10 @@ get_cover_online() {
 	fi
 
 	# Try to get the album cover online from api.deezer.com
-	API_URL="http://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
+	API_URL="https://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
 
 	# Extract the albumcover from the json returned
-	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
+	IMG_URL=$(curl -s --ssl "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
 
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
         if [ ! $SILENT ];then
@@ -116,7 +116,7 @@ get_cover_online() {
         if [ ! $SILENT ];then
             echo "kunst: cover found online"
         fi
-		curl -o $COVER -s $IMG_URL
+		curl -o $COVER -s --ssl $IMG_URL
 		ARTLESS=false
 	fi
 
