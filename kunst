@@ -161,7 +161,7 @@ update_cover() {
 		# use same regex to find album art as mpDris2
 		candidates=$(
 			find "$DIR" -type f \
-				| grep -iE '/(([0-9| |-]*)?)(album|cover|\.?folder|front).*\.(gif|jpeg|jpg|png)'
+				| grep -iE '/(([0-9| |-]*)?)(album|cover|\.?folder|front).*\.(gif|jpeg|jpg|png)$'
 		)
           while read -r CANDIDATE; do
             if [ -f "$CANDIDATE" ]; then
