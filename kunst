@@ -7,7 +7,7 @@
 # Dependencies: sxiv or imv, bash, ffmpeg, mpc, jq, mpd
 
 
-VERSION=1.2.4
+VERSION=1.2.5
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 WIDTH=250
