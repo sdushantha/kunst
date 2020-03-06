@@ -3,10 +3,12 @@ root = true
 # Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
-insert_final_newline = true
+insert_final_newline = false
 charset = utf-8
 indent_style = tab
 indent_size = 4
+binary_next_line   = true
+switch_case_indent = true
 
 # Tab indentation (no size specified)
 [*.md]
