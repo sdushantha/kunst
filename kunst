@@ -183,9 +183,9 @@ pre_exit() {
 
 main() {
 
-	[[ $KUNST_MUSIC_DIR != "" ]] && MUSIC_DIR=$KUNST_MUSIC_DIR
-	[[ $KUNST_SIZE != "" ]] && SIZE=$KUNST_SIZE
-	[[ $KUNST_POSITION != "" ]] && POSITION=$KUNST_POSITION
+	[ -z $KUNST_MUSIC_DIR ] && MUSIC_DIR=$KUNST_MUSIC_DIR
+	[ -z $KUNST_SIZE ] && SIZE=$KUNST_SIZE
+	[ -z $KUNST_POSITION ] && POSITION=$KUNST_POSITION
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
@@ -231,9 +231,9 @@ main() {
 		while true; do
 			mpc idle player &>/dev/null && (mpc status | grep "\[playing\]" &>/dev/null) && break
 		done
-		if [ ! $SILENT ]; then
-			echo "kunst: received event from mpd"
-		fi
+		
+		[ ! $SILENT ] && echo "kunst: received event from mpd"
+		
 		if [ "$VIEWER" = 'imv' ]; then
 			imv-msg "$(cat /tmp/kunst.pid)" close all
 			imv-msg "$(cat /tmp/kunst.pid)" open "$COVER"
