@@ -93,9 +93,7 @@ is_connected() {
 	if ping -q -c 1 -W 1 api.deezer.com >/dev/null; then
 		connected=true
 	else
-		if [ ! $SILENT ]; then
-			echo "kunst: unable to check online for the album art"
-		fi
+		[ ! $SILENT ] && echo "kunst: unable to check online for the album art"
 		connected=false
 	fi
 }
@@ -116,14 +114,10 @@ get_cover_online() {
 	IMG_URL=$(curl -s --ssl "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
 
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ]; then
-		if [ ! $SILENT ]; then
-			echo "error: cover not found online"
-		fi
+		[ ! $SILENT ] && echo "error: cover not found online"
 		ARTLESS=true
 	else
-		if [ ! $SILENT ]; then
-			echo "kunst: cover found online"
-		fi
+		[ ! $SILENT ] && echo "kunst: cover found online"
 		curl -o $COVER -s --ssl $IMG_URL
 		ARTLESS=false
 	fi
@@ -140,15 +134,11 @@ update_cover() {
 
 	# Check if the file has a embbeded album art
 	if [ $STATUS -eq 0 ]; then
-		if [ ! $SILENT ]; then
-			echo "kunst: extracted album art"
-		fi
+		[ ! $SILENT ] && echo "kunst: extracted album art"
 		ARTLESS=false
 	else
 		DIR="$MUSIC_DIR/$(dirname "$(mpc current -f %file%)")"
-		if [ ! $SILENT ]; then
-			echo "kunst: inspecting $DIR"
-		fi
+		[ ! $SILENT ] && echo "kunst: inspecting $DIR"
 
 		# Check if there is an album cover/art in the folder.
 		# Look at issue #9 for more details
@@ -162,27 +152,21 @@ update_cover() {
 				STATUS=0
 				ARTLESS=false
 				ffmpeg -loglevel error -i "$CANDIDATE" -vframes 1 $COVER -y
-				if [ ! $SILENT ]; then
-					echo "kunst: found cover $CANDIDATE"
-				fi
+				[ ! $SILENT ] && echo "kunst: found cover $CANDIDATE"
 				break
 			fi
 		done <<<"$candidates" # use here string so loop changes vars in main process
 	fi
 
 	if [ $STATUS -ne 0 ]; then
-		if [ ! $SILENT ]; then
-			echo "error: file does not have an album art"
-		fi
+		[ ! $SILENT ] && echo "error: file does not have an album art"
 		get_cover_online
 	fi
 
 	# Resize the image to 250x250
 	if [ $ARTLESS == false ]; then
 		ffmpeg -loglevel error -i $COVER -vframes 1 -vf scale=$WIDTH:-1 $COVER -y
-		if [ ! $SILENT ]; then
-			echo "kunst: resized album art to $SIZE"
-		fi
+		[ ! $SILENT ] && echo "kunst: resized album art to $SIZE"
 	fi
 
 }
