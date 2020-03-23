@@ -32,13 +32,9 @@ $ sudo make install
 ### Install it locally
 
 ```bash
-# Download the kunst source code, save as kunst
-# and make it executeable
-$ curl -L git.io/raw-kunst > kunst && chmod +x kunst
-
-# Then move kunst to somewhere in your $PATH
-# Here is an example
-$ mv kunst ~/script/
+# Download the kunst source code, save as kunst, make it executeable
+# and then move it to ~/.local/bin
+$ curl -L git.io/raw-kunst > kunst && chmod +x kunst && kunst mv ~/.local/bin
 ```
 
 ## Usage
