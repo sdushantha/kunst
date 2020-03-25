@@ -34,7 +34,7 @@ $ sudo make install
 ```bash
 # Download the kunst source code, save as kunst, make it executeable
 # and then move it to ~/.local/bin
-$ curl -L git.io/raw-kunst > kunst && chmod +x kunst && kunst mv ~/.local/bin
+$ curl -L git.io/raw-kunst > kunst && chmod +x kunst && mv kunst ~/.local/bin
 ```
 
 ## Usage
