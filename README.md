@@ -78,11 +78,6 @@ export KUNST_MUSIC_DIR="/home/username/Music/"
 </a>
 </p>
 
-## Todo
-- fix the whole script :P
-- check dependencies
-- maybe use musicbrainz for album cover?
-
 
 ## License
 MIT License
