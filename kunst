@@ -7,7 +7,7 @@
 # Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
 
-VERSION=1.2.9
+VERSION=1.3.0
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
@@ -101,11 +101,16 @@ get_cover_online() {
 		return
 	fi
 
+    # If the current playing song ends with .mp3 or something similar, remove
+    # it before searching for the album art because including the file extension
+    # reduces the chance of good results in the search query
+    QUERY=$(mpc current | sed 's/\.[^.]*$//')
+
 	# Try to get the album cover online from api.deezer.com
-	API_URL="https://api.deezer.com/search/autocomplete?q=$(mpc current)" && API_URL=${API_URL//' '/'%20'}
+	API_URL="https://api.deezer.com/search/autocomplete?q=$QUERY" && API_URL=${API_URL//' '/'%20'}
 
 	# Extract the albumcover from the json returned
-	IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0] | .picture_big')
+	IMG_URL=$(curl -s "$API_URL" | jq -r '.tracks.data[0].album.cover_big')
 
 	if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
         [ ! "$SILENT" ] && echo "error: cover not found online"
