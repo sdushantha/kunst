@@ -210,9 +210,10 @@ main() {
 		}
 	fi
 
-    [ "$KUNST_MUSIC_DIR" != "" ] && MUSIC_DIR="$KUNST_MUSIC_DIR"
-    [ "$KUNST_SIZE" != "" ] && SIZE="$KUNST_SIZE"
-    [ "$KUNST_POSITION" != "" ] && POSITION="$KUNST_POSITION"
+	[ -n "$KUNST_MUSIC_DIR" ] && MUSIC_DIR=$KUNST_MUSIC_DIR
+	[ -n "$KUNST_SIZE" ] && SIZE=$KUNST_SIZE
+	[ -n "$KUNST_POSITION" ] && POSITION=$KUNST_POSITION
+	[ -n "$KUNST_VIEWER" ] && VIEWER=$KUNST_VIEWER
 
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
