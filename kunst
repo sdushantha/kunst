@@ -14,7 +14,7 @@ SIZE="${WIDTH}x${WIDTH}"
 POSITION="+0+0"
 
 show_help() {
-	printf "%s" 'usage: kunst [-h] [--size "px"] [--position "+x+y"][--music_dir "path/to/dir"] [--silent] [--version]
+	printf "%s" 'usage: kunst [-h] [--size "px"] [--viewer imv|sxiv] [--position "+x+y"] [--music_dir "path/to/dir"] [--silent] [--version]
 
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
