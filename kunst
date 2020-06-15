@@ -12,7 +12,7 @@ COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
 POSITION="+0+0"
-
+ONLINE_ALBUM_ART=false
 
 show_help() {
 printf "%s" "\
@@ -29,13 +29,14 @@ optional arguments:
    --position            the position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
    --silent              dont show the output
+   --force-online        force getting cover from the internet 
    --version             show the version of kunst you are using
 "
 }
 
 
 # Parse the arguments
-options=$(getopt -o h --long position:,size:,music_dir:,version,silent,help -- "$@")
+options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -60,6 +61,9 @@ while true; do
 		    echo $VERSION
 			exit
 			;;
+        --force-online)
+            ONLINE_ALBUM_ART=true
+            ;;
         --silent)
             SILENT=true
             ;;
@@ -123,8 +127,15 @@ get_cover_online() {
 
 }
 
+find_album_art(){
+    # Check if the user wants to get the album art from the internet,
+    # regardless if the curent song has an embedded album art or not
+    if [ "$ONLINE_ALBUM_ART" == true ];then
+        [ ! "$SILENT" ] && echo "kunst: getting cover from internet"
+		get_cover_online
+        return
+    fi
 
-update_cover() {
 	# Extract the album art from the mp3 file and dont show the messsy
 	# output of ffmpeg
 	ffmpeg -i "$MUSIC_DIR$(mpc current -f %file%)" "$COVER" -y &> /dev/null
@@ -156,6 +167,12 @@ update_cover() {
         [ ! "$SILENT" ] && echo "error: file does not have an album art"
 		get_cover_online
 	fi
+}
+
+
+update_cover() {
+    find_album_art
+
 
 	# Resize the image to 250x250
 	if [ "$ARTLESS" == false ]; then
