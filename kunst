@@ -7,7 +7,7 @@
 # Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
 
-VERSION=1.3.0
+VERSION=1.3.1
 COVER=/tmp/kunst.jpg
 MUSIC_DIR=~/Music/
 SIZE=250x250
@@ -173,8 +173,6 @@ find_album_art(){
 update_cover() {
     find_album_art
 
-
-	# Resize the image to 250x250
 	if [ "$ARTLESS" == false ]; then
 		convert "$COVER" -resize "$SIZE" "$COVER" &> /dev/null
         [ ! "$SILENT" ] && echo "kunst: resized album art to $SIZE"
@@ -210,7 +208,6 @@ main() {
 	FIRST_RUN=true
 
 	while true; do
-
 		update_cover
 
 		if [ "$ARTLESS" == true ];then
