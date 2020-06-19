@@ -242,6 +242,8 @@ main() {
 			# Display the album art
 			if [ "$VIEWER" = 'sxiv' ]; then
 				sxiv -g $SIZE$POSITION -b "$COVER" -N "Kunst" &
+			else
+				imv "$COVER" &
 			fi
 			# Save the process ID so that we can kill the
 			# image viewer when the user exits the script
