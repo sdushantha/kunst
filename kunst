@@ -240,12 +240,7 @@ main() {
 			FIRST_RUN=false
 
 			# Display the album art
-			if [ "$VIEWER" = 'imv' ]; then
-				# if running SwayWM, tell sway to resize the imv window
-				[ -n "$SWAYSOCK" ] \
-					&& swaymsg for_window '[app_id="^imv$" title="^imv.*\/tmp\/kunst\.(jpg|png)"]' resize set width "$WIDTH" px height "$WIDTH" px
-				imv "$COVER" &
-			else
+			if [ "$VIEWER" = 'sxiv' ]; then
 				sxiv -g $SIZE$POSITION -b "$COVER" -N "Kunst" &
 			fi
 			# Save the process ID so that we can kill the
