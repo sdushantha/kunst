@@ -1,6 +1,6 @@
 <p align="center"><img src="extra/kunst_logo.png"><br><sub>✨ Download and display album art or display embedded album art  ✨</sub></p>
 
-```kunst``` is a daemon that extracts the album art from the songs playing in ```mpd``` and displays them in the a little window. It doesn't loop on a timer, instead it waits for ```mpd``` to send a ```player``` event. When it receives a ```player``` event, it wakes up and extracts the album art of the current playing track. This makes ```kunst```really lightweight and makes it idle at ```~0%``` CPU usage. If there no embbeded album art, it will try to fetch the album art from the internet.
+```kunst``` is a daemon that extracts the album art from the songs playing in ```mpd``` and displays them in the a little window or in a notification. It doesn't loop on a timer, instead it waits for ```mpd``` to send a ```player``` event. When it receives a ```player``` event, it wakes up and extracts the album art of the current playing track. This makes ```kunst```really lightweight and makes it idle at ```~0%``` CPU usage. If there no embbeded album art, it will try to fetch the album art from the internet.
 
 
 <p align="left">
@@ -10,6 +10,7 @@
 
 ## Dependencies
 - ```sxiv``` or ```imv```
+- ```dunst``` or any compatible with ```notify-send```
 - ```bash```
 - ```ffmpeg```
 - ```mpc```
@@ -37,11 +38,19 @@ $ sudo make install
 $ curl -L git.io/raw-kunst > kunst && chmod +x kunst && mv kunst ~/.local/bin
 ```
 
+### Install as a systemd service
+
+```bash
+# Copy kunst.service to /usr/lib/systemd/user
+# and enable / start the service
+$ cp kunst.service /usr/lib/systemd/user/ && systemctl --user enable --now kunst.service
+```
+
 ## Usage
 
 ```bash
 $ kunst --help
-usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--silent] [--version]
+usage: kunst [-h] [--size px] [--music_dir path/to/dir] [--silent] [--notify-send] [--version]
 
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
@@ -54,6 +63,7 @@ optional arguments:
    --position            the position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
    --silent              dont show the output
+   --notify-send         send album image in a notification along side with artist, title and duration
    --version             show the version of kunst you are using
 ```
 
@@ -70,7 +80,24 @@ export KUNST_POSITION="+0+0"
 
 # Where your music is located
 export KUNST_MUSIC_DIR="/home/username/Music/"
+
+# To display notification with tiny art cover instead of the full album art cover
+export KUNST_MODE="notify"
 ```
+
+If you've installed as a service then you need to configure env var as follow:
+
+```bash
+# Edit the kunst service
+$ systemctl --user edit kunst.service
+
+# Put env var in the edited file
+[Service]
+environment="KUNST_ICONSIZE=70x70"
+environment="KUNST_MODE=notify"
+```
+
+
 
 <p align="center">
 <a href="https://www.reddit.com/user/SpicyBroseph">

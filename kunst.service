@@ -1,0 +1,20 @@
+[Unit]
+Description=Image notifier for Music Player Daemon
+After=mpd.service
+Requires=mpd.service
+Wants=dunst.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kunst
+
+# disallow writing to /usr, /bin, /sbin, ...
+ProtectSystem=yes
+
+# more paranoid security settings
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+
+[Install]
+WantedBy=default.target
