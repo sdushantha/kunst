@@ -149,6 +149,10 @@ find_album_art(){
 		ARTLESS=false
 	else
         DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
+
+        # prevent iterating the entire $MUSIC_DIR if mpc experiences an error
+        [ "$DIR" == "$MUSIC_DIR". ] && return 1
+
         [ ! "$SILENT" ] && echo "kunst: inspecting $DIR"
 
         COVER_NAMES=${KUNST_COVER_NAMES:-'folder|cover|front'}
