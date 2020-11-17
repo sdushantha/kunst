@@ -13,6 +13,7 @@ MUSIC_DIR=~/Music/
 SIZE=250x250
 POSITION="+0+0"
 ONLINE_ALBUM_ART=false
+SAVE_DOWNLOADED_COVER=false
 
 show_help() {
 printf "%s" "\
@@ -30,13 +31,14 @@ optional arguments:
    --music_dir           the music directory which MPD plays from
    --silent              dont show the output
    --force-online        force getting cover from the internet
+   --save-cover          save downloaded cover art to your music directory so you won't have to fetch it from the internet again
    --version             show the version of kunst you are using
 "
 }
 
 
 # Parse the arguments
-options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,silent,help -- "$@")
+options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,silent,save-cover,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -66,6 +68,9 @@ while true; do
             ;;
         --silent)
             SILENT=true
+            ;;
+        --save-cover)
+            SAVE_DOWNLOADED_COVER=true
             ;;
         --)
             shift
@@ -123,6 +128,11 @@ get_cover_online() {
         [ ! "$SILENT" ] && echo "kunst: cover found online"
 		curl -o "$COVER" -s "$IMG_URL"
 		ARTLESS=false
+		if [ "$SAVE_DOWNLOADED_COVER" == true ];then
+			COVER_PATH="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")/cover.png"
+			[ ! "$SILENT" ] && echo "kunst: saving downloaded cover to $COVER_PATH"
+			convert "$COVER" $COVER_PATH &> /dev/null
+		fi
 	fi
 
 }
