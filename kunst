@@ -229,7 +229,9 @@ main() {
 			FIRST_RUN=false
 
 			# Display the album art using sxiv
-			sxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst" &
+      # If sxiv is closed, kill the script as well with the trap at the and of
+      # the script (see issue #48).
+      (sxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst"; kill -USR1 0) &
 
 			# Save the process ID so that we can kill
 			# sxiv when the user exits the script
@@ -251,4 +253,6 @@ main() {
 trap "" SIGTSTP
 
 trap pre_exit EXIT
+trap 'exit 1' TERM HUP INT
+trap 'exit 0' USR1
 main
