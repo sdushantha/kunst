@@ -9,7 +9,7 @@
 
 VERSION=1.3.2
 COVER=/tmp/kunst.jpg
-MUSIC_DIR=~/Music/
+MUSIC_DIR=~/Music
 SIZE=250x250
 POSITION="+0+0"
 ONLINE_ALBUM_ART=false
