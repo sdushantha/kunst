@@ -53,6 +53,7 @@ optional arguments:
    --size                what size to display the album art in
    --position            the position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
+   --host                address MPD is bound to
    --silent              dont show the output
    --version             show the version of kunst you are using
 ```
@@ -70,6 +71,9 @@ export KUNST_POSITION="+0+0"
 
 # Where your music is located
 export KUNST_MUSIC_DIR="/home/username/Music/"
+
+# MPD host address
+export KUNST_MPD_HOST="127.0.0.2"
 ```
 
 <p align="center">
