@@ -6,13 +6,21 @@
 #
 # Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
-
 VERSION=1.3.2
 COVER=/tmp/kunst.jpg
-MUSIC_DIR=~/Music
+METADATA=/tmp/kunst.txt
+MUSIC_DIR=$HOME/Music
 SIZE=250x250
+NO_PIC_ON_NOTIF=false
+ARTIST_NOTIF_COLOR="#ebe3b9"
+SONG_NOTIF_COLOR="#caf6bb"
+DUNST_TOP_STYLE="      "
+DUNST_TOP_COLOR="#2c2e3e"
 POSITION="+0+0"
 ONLINE_ALBUM_ART=false
+API="https://api.deezer.com/search/autocomplete?q="
+ID=696
+APPNAME="mpd_enjoyer"
 
 show_help() {
 printf "%s" "\
@@ -34,9 +42,8 @@ optional arguments:
 "
 }
 
-
 # Parse the arguments
-options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,silent,help -- "$@")
+options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,no-send-notifications,no-send-pic,silent,help -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -57,12 +64,18 @@ while true; do
 		    show_help
 			exit
             ;;
-		--version)
-		    echo $VERSION
-			exit
-			;;
+        -v|--version)
+            echo $VERSION
+            exit
+            ;;
         --force-online)
             ONLINE_ALBUM_ART=true
+            ;;
+        --no-send-notifications)
+            NO_SEND_NOTIFICATIONS=true
+            ;;
+        --no-send-pic)
+            NO_SEND_PIC=true
             ;;
         --silent)
             SILENT=true
@@ -95,7 +108,7 @@ is_connected() {
 	fi
 }
 
-
+# Gets the album metadata from the internet via some api like Deeser or something
 get_cover_online() {
 	# Check if connected to internet
 	is_connected
@@ -111,7 +124,7 @@ get_cover_online() {
     QUERY=$(mpc current | sed 's/\.[^.]*$//' | iconv -t ascii//TRANSLIT -f utf8)
 
 	# Try to get the album cover online from api.deezer.com
-	API_URL="https://api.deezer.com/search/autocomplete?q=$QUERY" && API_URL=${API_URL//' '/'%20'}
+	API_URL="$API$QUERY" && API_URL=${API_URL//' '/'%20'}
 
 	# Extract the albumcover from the json returned
 	IMG_URL=$(curl -s "$API_URL" | jq -r '.tracks.data[0].album.cover_big')
@@ -121,13 +134,57 @@ get_cover_online() {
 		ARTLESS=true
 	else
         [ ! "$SILENT" ] && echo "kunst: cover found online"
-		curl -o "$COVER" -s "$IMG_URL"
-		ARTLESS=false
+        curl -o "$COVER" -s "$IMG_URL"
+	    ARTLESS=false
 	fi
+}
+
+# Gets the album metadata from the song itself
+get_album_offline() {
+    # Get music location
+
+    echo "Getting Music Location..."
+    SONG=$(mpc current -f %file%)
+
+    # Performs a copy of the album found in the metadata of the song
+    ffmpeg -hide_banner -loglevel error -i "$MUSIC_DIR/$SONG" -an -vcodec copy $COVER
+}
+
+# Override Metadata
+send_notification() { 
+
+    if [ "$(mpc current -f %artist%)" == "" ] || [ "$(mpc current -f %name%)" == "" ] ; then
+        
+        if [ "$connected" == false ] ; then
+            ARTIST_NAME=" MPD PLAYER "
+            SONG_NAME=" Groovy "
+        else
+            echo "No Artist metadata: Searching on the internet..."
+        
+            curl -s "$API_URL" -o $METADATA
+        
+            ARTIST_NAME=$(jq -r '.tracks.data[0].artist.name' $METADATA)
+            SONG_NAME=$(jq -r '.tracks.data[0].title' $METADATA)
+            
+            if [ "$ARTIST_NAME" == null ] || [ "$SONG_NAME" == null ]; then
+                ARTIST_NAME=" MPD PLAYER "
+                SONG_NAME=" Groovy "
+            fi
+       fi
+    else
+        ARTIST_NAME=$(mpc current -f %artist%)
+        SONG_NAME=$(mpc current -f %name%)
+    fi 
+    
+    if [ "$NO_PIC_ON_NOTIF" == true ] ; then
+        dunstify -r $ID -a $APPNAME -h string:fgcolor:$DUNST_TOP_COLOR "$DUNST_TOP_STYLE" "<span foreground='$ARTIST_NOTIF_COLOR' font_desc='Cartograph CF Italic 12.5'><b>$ARTIST_NAME</b></span>\n<span foreground='$SONG_NOTIF_COLOR' font_desc='Cartograph CF Italic 14'><b>$SONG_NAME</b></span>"
+    else
+        dunstify  -i $COVER -r $ID -a $APPNAME -h string:fgcolor:$DUNST_TOP_COLOR "$DUNST_TOP_STYLE" "<span foreground='$ARTIST_NOTIF_COLOR' font_desc='Cartograph CF Italic 12'><b>$ARTIST_NAME</b></span>\n<span foreground='$SONG_NOTIF_COLOR' font_desc='Cartograph CF Italic 12'><b>$SONG_NAME</b></span>"
+    fi
 
 }
 
-find_album_art(){
+find_album_art() {
     # Check if the user wants to get the album art from the internet,
     # regardless if the curent song has an embedded album art or not
     if [ "$ONLINE_ALBUM_ART" == true ];then
@@ -143,16 +200,21 @@ find_album_art(){
 	# Get the status of the previous command
 	STATUS=$?
 
-	# Check if the file has a embbeded album art
-	if [ "$STATUS" -eq 0 ];then
+    # Check if the file has a embbeded album art
+    if [ "$STATUS" -eq 0 ];then
         [ ! "$SILENT" ] && echo "kunst: extracted album art"
-		ARTLESS=false
-	else
-        DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
-        [ ! "$SILENT" ] && echo "kunst: inspecting $DIR"
+        ARTLESS=false
+    else
 
-		# Check if there is an album cover/art in the folder.
-		# Look at issue #9 for more details
+        DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
+
+        # prevent iterating the entire $MUSIC_DIR if mpc experiences an error
+        [ "$DIR" == "$MUSIC_DIR". ] && return 1
+
+        [ ! "$SILENT" ] && echo "kunst: inspecting $DIR"
+        
+        # Check if there is an album cover/art in the folder.
+        # Look at issue #9 for more details
         for CANDIDATE in "$DIR/cover."{png,jpg}; do
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
@@ -192,7 +254,7 @@ pre_exit() {
 
 main() {
 
-    dependencies=(sxiv convert bash ffmpeg mpc jq mpd)
+    dependencies=(sxiv convert bash ffmpeg mpc jq mpd dunstify dunst)
     for dependency in "${dependencies[@]}"; do
         type -p "$dependency" &>/dev/null || {
             echo "error: Could not find '${dependency}', is it installed?" >&2
@@ -207,40 +269,48 @@ main() {
 	# Flag to run some commands only once in the loop
 	FIRST_RUN=true
 
-	while true; do
+    while true; do
 		update_cover
 
 		if [ "$ARTLESS" == true ];then
 			# Dhange the path to COVER because the music note
-			# image is a png not jpg
-			COVER=/tmp/kunst.png
+            # image is a png not jpg
+            COVER=/tmp/kunst.png
+            
+            # Decode the base64 encoded image and save it
+            # to /tmp/kunst.png
+            echo "$MUSIC_NOTE" | base64 --decode > "$COVER"
+        fi
 
-			# Decode the base64 encoded image and save it
-			# to /tmp/kunst.png
-			echo "$MUSIC_NOTE" | base64 --decode > "$COVER"
-		fi
+        # Notifications thingy
+        if [ ! "$NO_SEND_NOTIFICATIONS" ] ; then
+            send_notification
+        fi
 
         if [ ! "$SILENT" ];then
             echo "kunst: swapped album art to $(mpc current)"
             printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
         fi
+        
 
 		if [ "$FIRST_RUN" == true ]; then
 			FIRST_RUN=false
 
 			# Display the album art using sxiv
-			sxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst" &
+            if [ "$NO_SEND_PIC" != true ] ; then
+    			sxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst" &
+            fi
 
 			# Save the process ID so that we can kill
 			# sxiv when the user exits the script
 			echo $! >/tmp/kunst.pid
 		fi
-
-		# Waiting for an event from mpd; play/pause/next/previous
-		# this is lets kunst use less CPU :)
-		while true; do
-		    mpc idle player &>/dev/null && (mpc status | grep "\[playing\]" &>/dev/null) && break
-		done
+        
+	    # Waiting for an event from mpd; play/pause/next/previous
+	    # this is lets kunst use less CPU :)
+        while true; do
+            mpc idle player &>/dev/null && (mpc status | grep "\[playing\]" &>/dev/null) && break
+        done
         [ ! "$SILENT" ] && echo "kunst: received event from mpd"
 	done
 }
