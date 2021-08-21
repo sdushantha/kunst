@@ -149,18 +149,25 @@ find_album_art(){
 		ARTLESS=false
 	else
         DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
+
+        # prevent iterating the entire $MUSIC_DIR if mpc experiences an error
+        [ "$DIR" == "$MUSIC_DIR". ] && return 1
+
         [ ! "$SILENT" ] && echo "kunst: inspecting $DIR"
 
-		# Check if there is an album cover/art in the folder.
-		# Look at issue #9 for more details
-        for CANDIDATE in "$DIR/cover."{png,jpg}; do
+        COVER_NAMES=${KUNST_COVER_NAMES:-'folder|cover|front'}
+        COVER_EXT=${KUNST_COVER_EXT:-'jpg|png'}
+
+        # Check if there is an album cover/art in the folder.
+        # Look at issues #9 and #45 for more details
+        while IFS= read -r CANDIDATE; do
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
                 ARTLESS=false
                 convert "$CANDIDATE" $COVER &> /dev/null
-                [ ! "$SILENT" ] && echo "kunst: found cover.png"
+                [ ! "$SILENT" ] && echo "kunst: found $(basename "$CANDIDATE")"
             fi
-        done
+        done < <(find "$DIR" -type f | grep -i -E -- "($COVER_NAMES).($COVER_EXT)")
     fi
 
 	if [ "$STATUS" -ne 0 ];then
