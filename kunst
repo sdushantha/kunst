@@ -211,12 +211,8 @@ main() {
 		update_cover
 
 		if [ "$ARTLESS" == true ];then
-			# Dhange the path to COVER because the music note
-			# image is a png not jpg
-			COVER=/tmp/kunst.png
 
 			# Decode the base64 encoded image and save it
-			# to /tmp/kunst.png
 			echo "$MUSIC_NOTE" | base64 --decode > "$COVER"
 		fi
 
