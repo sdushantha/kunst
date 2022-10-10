@@ -17,7 +17,7 @@ PROG_NAME=$(basename "$0")
 
 show_help() {
 printf "%s" "\
-usage: kunst [-h] [--size \"px\"] [--position \"+x+y\"][--music_dir \"path/to/dir\"] [--silent] [--version]
+usage: kunst [-h] [--size \"px\"] [--position \"+x+y\"][--music_dir \"path/to/dir\"] [--verbose] [--version]
 
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
@@ -29,14 +29,14 @@ optional arguments:
    --size                what size to display the album art in
    --position            the position where the album art should be displayed
    --music_dir           the music directory which MPD plays from
-   --silent              dont show the output
+   --verbose             show the output
    --force-online        force getting cover from the internet
    --version             show the version of kunst you are using
 "
 }
 
 log() {
-    [ ! "$SILENT" ] && echo "$PROG_NAME: $1"
+    [ "$VERBOSE" ] && echo "$PROG_NAME: $1"
 }
 
 logError() {
@@ -46,7 +46,7 @@ logError() {
 
 
 # Parse the arguments
-options=$(getopt -o h --long position:,size:,music_dir:,version,force-online,silent,help -- "$@")
+options=$(getopt -o h --long 'position:,size:,music_dir:,version,force-online,verbose,help' -- "$@")
 eval set -- "$options"
 
 while true; do
@@ -74,8 +74,8 @@ while true; do
         --force-online)
             ONLINE_ALBUM_ART=true
             ;;
-        --silent)
-            SILENT=true
+        --verbose)
+            verbose=true
             ;;
         --)
             shift
