@@ -122,7 +122,7 @@ get_cover_online() {
 
     # Try to get the album cover online from api.deezer.com
     API_URL="https://api.deezer.com/search/autocomplete?q=$QUERY" && API_URL=${API_URL//' '/'%20'}
-    echo $API_URL
+    log "fetching $API_URL"
     # Extract the albumcover from the json returned
     JSON=$(curl -s "$API_URL")
     ALBUM=$(echo "$JSON" | jq -r '.tracks.data[0].album.picture_big' | sed 's/null//');
