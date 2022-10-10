@@ -16,8 +16,9 @@ ONLINE_ALBUM_ART=false
 PROG_NAME=$(basename "$0")
 
 show_help() {
-printf "%s" "\
-usage: kunst [-h] [--size \"px\"] [--position \"+x+y\"][--music_dir \"path/to/dir\"] [--verbose] [--version]
+    printf "%s" "\
+usage: kunst [-h|--help] [--size \"px\"] [--position \"+x+y\"]
+             [--music_dir \"path/to/dir\"] [--verbose] [--version]
 
 ┬┌─┬ ┬┌┐┌┌─┐┌┬┐
 ├┴┐│ ││││└─┐ │
