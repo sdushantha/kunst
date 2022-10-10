@@ -9,9 +9,9 @@
 
 VERSION=1.3.4
 COVER=/tmp/kunst.jpg
-MUSIC_DIR=~/Music
-SIZE=250x250
-POSITION="+0+0"
+MUSIC_DIR="${KUNST_MUSIC_DIR:-~/Music}"
+SIZE="${KUNST_SIZE:-250x250}"
+POSITION="${KUNST_POSITION:-+0+0}"
 ONLINE_ALBUM_ART=false
 PROG_NAME=$(basename "$0")
 
@@ -211,10 +211,6 @@ main() {
             logError "could not find '${dependency}', is it installed?"
         }
     done
-
-    [ "$KUNST_MUSIC_DIR" != "" ] && MUSIC_DIR="$KUNST_MUSIC_DIR"
-    [ "$KUNST_SIZE" != "" ] && SIZE="$KUNST_SIZE"
-    [ "$KUNST_POSITION" != "" ] && POSITION="$KUNST_POSITION"
 
     # Flag to run some commands only once in the loop
     FIRST_RUN=true
