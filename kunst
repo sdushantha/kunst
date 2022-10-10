@@ -114,7 +114,10 @@ get_cover_online() {
     API_URL="https://api.deezer.com/search/autocomplete?q=$QUERY" && API_URL=${API_URL//' '/'%20'}
     echo $API_URL
     # Extract the albumcover from the json returned
-    IMG_URL=$(curl -s "$API_URL" | jq -r '.playlists.data[0].picture_big')
+    JSON=$(curl -s "$API_URL")
+    ALBUM=$(echo "$JSON" | jq -r '.tracks.data[0].album.picture_big' | sed 's/null//');
+    ARTIST=$(echo "$JSON" | jq -r '.tracks.data[0].artist.picture_big' | sed 's/null//');
+    IMG_URL="${ALBUM:-$ARTIST}"
 
     if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
         [ ! "$SILENT" ] && echo "error: cover not found online"
