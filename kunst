@@ -12,7 +12,7 @@ COVER=/tmp/kunst.jpg
 MUSIC_DIR="${KUNST_MUSIC_DIR:-~/Music}"
 SIZE="${KUNST_SIZE:-250x250}"
 POSITION="${KUNST_POSITION:-+0+0}"
-ONLINE_ALBUM_ART=false
+ONLINE_ALBUM_ART=""
 PROG_NAME=$(basename "$0")
 
 show_help() {
@@ -143,8 +143,8 @@ get_cover_online() {
 
 find_album_art(){
     # Check if the user wants to get the album art from the internet,
-    # regardless if the curent song has an embedded album art or not
-    if [ "$ONLINE_ALBUM_ART" == true ];then
+    # regardless if the current song has an embedded album art or not
+    if [ ! -z "$ONLINE_ALBUM_ART" ]; then
         log "getting cover from internet"
         get_cover_online
         return
