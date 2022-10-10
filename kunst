@@ -13,6 +13,7 @@ MUSIC_DIR=~/Music
 SIZE=250x250
 POSITION="+0+0"
 ONLINE_ALBUM_ART=false
+PROG_NAME=$(basename "$0")
 
 show_help() {
 printf "%s" "\
@@ -32,6 +33,15 @@ optional arguments:
    --force-online        force getting cover from the internet
    --version             show the version of kunst you are using
 "
+}
+
+log() {
+    [ ! "$SILENT" ] && echo "$PROG_NAME: $1"
+}
+
+logError() {
+    echo "$PROG_NAME: $1" >&2
+    exit 1
 }
 
 
@@ -90,7 +100,7 @@ is_connected() {
     if ping -q -c 1 -W 1 api.deezer.com >/dev/null; then
         connected=true
     else
-        [ ! "$SILENT" ] && echo "kunst: unable to check online for the album art"
+        log "unable to check online for the album art"
         connected=false
     fi
 }
@@ -120,10 +130,10 @@ get_cover_online() {
     IMG_URL="${ALBUM:-$ARTIST}"
 
     if [ "$IMG_URL" = '' ] || [ "$IMG_URL" = 'null' ];then
-        [ ! "$SILENT" ] && echo "error: cover not found online"
+        log "cover not found online"
         ARTLESS=true
     else
-        [ ! "$SILENT" ] && echo "kunst: cover found online"
+        log "cover found online"
         curl -o "$COVER" -s "$IMG_URL"
         ARTLESS=false
     fi
@@ -134,7 +144,7 @@ find_album_art(){
     # Check if the user wants to get the album art from the internet,
     # regardless if the curent song has an embedded album art or not
     if [ "$ONLINE_ALBUM_ART" == true ];then
-        [ ! "$SILENT" ] && echo "kunst: getting cover from internet"
+        log "getting cover from internet"
         get_cover_online
         return
     fi
@@ -148,11 +158,11 @@ find_album_art(){
 
     # Check if the file has a embbeded album art
     if [ "$STATUS" -eq 0 ];then
-        [ ! "$SILENT" ] && echo "kunst: extracted album art"
+        log "extracted album art"
         ARTLESS=false
     else
         DIR="$MUSIC_DIR$(dirname "$(mpc current -f %file%)")"
-        [ ! "$SILENT" ] && echo "kunst: inspecting $DIR"
+        log "inspecting $DIR"
 
         # Check if there is an album cover/art in the folder.
         # Look at issue #9 for more details
@@ -161,13 +171,13 @@ find_album_art(){
                 STATUS=0
                 ARTLESS=false
                 convert "$CANDIDATE" $COVER &> /dev/null
-                [ ! "$SILENT" ] && echo "kunst: found cover.png"
+                log "found cover.png"
             fi
         done
     fi
 
     if [ "$STATUS" -ne 0 ];then
-        [ ! "$SILENT" ] && echo "error: file does not have an album art"
+        log "file does not have an album art"
         get_cover_online
     fi
 }
@@ -178,7 +188,7 @@ update_cover() {
 
     if [ "$ARTLESS" == false ]; then
         convert "$COVER" -resize "$SIZE" "$COVER" &> /dev/null
-        [ ! "$SILENT" ] && echo "kunst: resized album art to $SIZE"
+        log "resized album art to $SIZE"
     fi
 
 }
@@ -198,8 +208,7 @@ main() {
     dependencies=(sxiv convert bash ffmpeg mpc jq mpd)
     for dependency in "${dependencies[@]}"; do
         type -p "$dependency" &>/dev/null || {
-            echo "error: Could not find '${dependency}', is it installed?" >&2
-            exit 1
+            logError "could not find '${dependency}', is it installed?"
         }
     done
 
@@ -223,10 +232,7 @@ main() {
             echo "$MUSIC_NOTE" | base64 --decode > "$COVER"
         fi
 
-        if [ ! "$SILENT" ];then
-            echo "kunst: swapped album art to $(mpc current)"
-            printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-        fi
+        log "swapped album art to $(mpc current)"
 
         if [ "$FIRST_RUN" == true ]; then
             FIRST_RUN=false
@@ -244,7 +250,7 @@ main() {
         while true; do
             mpc idle player &>/dev/null && (mpc status | grep "\[playing\]" &>/dev/null) && break
         done
-        [ ! "$SILENT" ] && echo "kunst: received event from mpd"
+        log "received event from mpd"
     done
 }
 
