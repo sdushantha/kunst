@@ -9,7 +9,7 @@
 </p>
 
 ## Dependencies
-- ```sxiv``` or ```imv```
+- ```sxiv```
 - ```bash```
 - ```ffmpeg```
 - ```mpc```
