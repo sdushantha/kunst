@@ -167,7 +167,7 @@ find_album_art(){
 
         # Check if there is an album cover/art in the folder.
         # Look at issue #9 for more details
-        for CANDIDATE in "$DIR/cover."{png,jpg}; do
+        for CANDIDATE in "$DIR/cover."{png,jpg,webp}; do
             if [ -f "$CANDIDATE" ]; then
                 STATUS=0
                 ARTLESS=false
