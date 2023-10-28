@@ -76,7 +76,7 @@ while true; do
             ONLINE_ALBUM_ART=true
             ;;
         --verbose)
-            verbose=true
+            VERBOSE=true
             ;;
         --)
             shift
