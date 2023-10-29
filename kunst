@@ -4,7 +4,7 @@
 # ┴ ┴└─┘┘└┘└─┘ ┴
 # Created by Siddharth Dushantha
 #
-# Dependencies: sxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
+# Dependencies: nsxiv, imagemagick, bash, ffmpeg, mpc, jq, mpd
 
 
 VERSION=1.3.4
@@ -197,7 +197,7 @@ update_cover() {
 pre_exit() {
     # Get the proccess ID of kunst and kill it.
     # We are dumping the output of kill to /dev/null
-    # because if the user quits sxiv before they
+    # because if the user quits nsxiv before they
     # exit kunst, an error will be shown
     # from kill and we dont want that
     kill -9 "$(cat /tmp/kunst.pid)" &>/dev/null
@@ -206,7 +206,7 @@ pre_exit() {
 
 main() {
 
-    dependencies=(sxiv convert bash ffmpeg mpc jq mpd)
+    dependencies=(nsxiv convert bash ffmpeg mpc jq mpd)
     for dependency in "${dependencies[@]}"; do
         type -p "$dependency" &>/dev/null || {
             logError "could not find '${dependency}', is it installed?"
@@ -234,11 +234,11 @@ main() {
         if [ "$FIRST_RUN" == true ]; then
             FIRST_RUN=false
 
-            # Display the album art using sxiv
-            sxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst" &
+            # Display the album art using nsxiv
+            nsxiv -g "$SIZE$POSITION" -b "$COVER" -N "Kunst" &
 
             # Save the process ID so that we can kill
-            # sxiv when the user exits the script
+            # nsxiv when the user exits the script
             echo $! >/tmp/kunst.pid
         fi
 
@@ -252,7 +252,7 @@ main() {
 }
 
 # Disable CTRL-Z because if we allowed this key press,
-# then the script would exit but, sxiv would still be
+# then the script would exit but, nsxiv would still be
 # running
 trap "" SIGTSTP
 
